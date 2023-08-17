@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <title>Document</title>
+  </head>
+  <body style="min-height: 100vh">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-3">
+      <div class="container">
+        <a class="navbar-brand" href="#"
+          ><img src="./images/logo.png" width="60px" alt="logo"
+        /></a>
+        <div class="m-2">
+          <button
+            type="button"
+            id="loginBtn"
+            class="btn btn-primary d-none"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            Login
+          </button>
+          <div class="d-none" id="logged">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="createVisitBtn"
+              data-bs-toggle="modal"
+              data-bs-target="#visitModal"
+            >
+              Create Visit
+            </button>
+            <button class="btn btn-danger" id="logoutBtn" onclick="logout()">
+              Log out</button
+            > 
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container p-3">
+      <!-- FILTER FORM  -->
+      <div class="card bg-primary bg-opacity-10 border-0">
+        <form class="row g-3 card-body" id="filterForm">
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                id="searchTitle"
+                name="searchTitle"
+                type="search"
+                class="form-control"
+                placeholder="search by title"
+              />
+              <label for="searchTitle">Title/context</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating">
+              <select id="status" name="status" class="form-select">
+                <option value="all">all</option>
+                <option value="open">open</option>
+                <option value="done">done</option>
+              </select>
+
+              <label for="searchTitle">Status</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating">
+              <select id="urgency" name="urgency" class="form-select">
+                <option value="all">all</option>
+                <option value="urgent">high</option>
+                <option value="priority">normal</option>
+                <option value="normal">low</option>
+              </select>
+              <label for="searchTitle">Urgency</label>
+            </div>
+          </div>
+          <div class="col-md-12 d-flex justify-content-center">
+            <button
+              class="btn w-25 btn-outline-primary"
+              type="submit"
+              id="button-addon2"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- EMPTY DATA -->
+      <div class="card mt-5" id="noItemsCard">
+        <div class="card-body text-center">No items have been added.</div>
+      </div>
+        <!-- EMPTY FILTERED DATA -->
+      <div class="card mt-5 d-none" id="noFilteredItemsCard">
+        <div class="card-body text-center">No items found.</div>
+      </div>
+    </div>
+
+    <!-- VISIT FORM -->
+    <form id="visitForm">
+      <div
+        class="modal fade modal-lg"
+        id="visitModal"
+        tabindex="-1"
+        aria-labelledby="visitModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="visitModalLabel">
+                Create Visit
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <div class="form-floating">
+                  <select id="doctorSelectbox" name="doctor" class="form-select">
+                    <option value="" disabled selected>Select option</option>
+                    <option value="cardiologist">Cardiologist</option>
+                    <option value="dentist">Dentist</option>
+                    <option value="therapist">Therapist</option>
+                  </select>
+                  <label for="doctor">Doctor</label>
+                </div>
+              </div>
+              <div id="visitInfo" class="d-none">
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      name="visitPurpose"
+                      class="form-control"
+                      id="visitPurposeModal"
+                    />
+                    <label for="visitPurpose">Visit purpose</label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="visitDescModal"
+                      name="visitDesc"
+                    />
+                    <label for="visitDesc">Brief visit description</label>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <select
+                      id="urgencyModal"
+                      name="urgency"
+                      class="form-select"
+                    >
+                      <option value="normal">normal</option>
+                      <option value="priority">priority</option>
+                      <option value="urgent">urgent</option>
+                    </select>
+                    <label for="searchTitle">Urgency</label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="fullnameModal"
+                      name="fullname"
+                    />
+                    <label for="fullname">Fullname</label>
+                  </div>
+                </div>
+                <div id="doctorSpecifiedFields"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                id="closeVisitModalButton"
+                
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                data-bs-dismiss="modal"
+                id="submitVisitButton"
+                class="btn btn-primary"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    
+
+
+
+    <div id="visitCards" class="container mt-5">
+      <div id="visitCardsGrid" class="row"></div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <form id="login-form">
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="loginModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  placeholder="Enter your username"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Enter your password"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                id="submitLogin"
+                class="btn btn-primary btn-block"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/doctor.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/formClass.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
